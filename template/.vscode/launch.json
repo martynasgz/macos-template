@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb-dap",
+      "request": "launch",
+      "name": "Build & Debug __NAME__",
+      "program": "${workspaceFolder}/build/Build/Products/Debug/__NAME__.app/Contents/MacOS/__NAME__",
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "Build __NAME__"
+    }
+  ]
+}

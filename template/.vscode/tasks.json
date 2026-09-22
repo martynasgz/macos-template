@@ -1,0 +1,46 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build __NAME__",
+      "type": "shell",
+      "command": "xcodebuild",
+      "args": [
+        "-scheme", "__NAME__",
+        "-configuration", "Debug",
+        "-destination", "platform=macOS",
+        "-derivedDataPath", "build",
+        "build"
+      ],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "silent", "panel": "shared", "clear": true },
+      "problemMatcher": {
+        "owner": "swift",
+        "fileLocation": "autoDetect",
+        "pattern": {
+          "regexp": "^(.*):(\\d+):(\\d+): (warning|error): (.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "severity": 4,
+          "message": 5
+        }
+      }
+    },
+    {
+      "label": "Run __NAME__",
+      "type": "shell",
+      "command": "open",
+      "args": ["${workspaceFolder}/build/Build/Products/Debug/__NAME__.app"],
+      "dependsOn": ["Build __NAME__"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Clean __NAME__",
+      "type": "shell",
+      "command": "xcodebuild",
+      "args": ["-scheme", "__NAME__", "-derivedDataPath", "build", "clean"],
+      "problemMatcher": []
+    }
+  ]
+}
