@@ -27,7 +27,7 @@ DEST_INPUT="${2:-$SCRIPT_DIR/../$NAME}"
 mkdir -p "$DEST_INPUT"
 DEST="$(cd "$DEST_INPUT" && pwd)"
 
-if [ -n "$(ls -A "$DEST" 2>/dev/null)" ]; then
+if [ -n "$(find "$DEST" -mindepth 1 -not -name '.DS_Store' -print -quit)" ]; then
   echo "Error: $DEST already exists and is not empty" >&2
   exit 1
 fi
