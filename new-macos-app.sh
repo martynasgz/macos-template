@@ -2,13 +2,15 @@
 # Scaffold a new macOS SwiftUI app from this template, with XcodeGen + xcode-build-server
 # wired up for VS Code intellisense.
 #
-# Usage: ./new-macos-app.sh <ProjectName> [parent-directory]
-#   parent-directory defaults to the parent folder this script lives in.
+# Usage: ./new-macos-app.sh <ProjectName> [target-directory]
+#   target-directory is where the project gets scaffolded directly (created if
+#   needed, must be empty). Pass "." to scaffold into the current directory.
+#   Defaults to a new sibling folder next to this template, named <ProjectName>.
 
 set -euo pipefail
 
 if [ $# -lt 1 ]; then
-  echo "Usage: $0 <ProjectName> [parent-directory]" >&2
+  echo "Usage: $0 <ProjectName> [target-directory]" >&2
   exit 1
 fi
 
@@ -20,11 +22,13 @@ if [[ ! "$NAME" =~ ^[A-Za-z][A-Za-z0-9]*$ ]]; then
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PARENT_DIR="${2:-$(cd "$SCRIPT_DIR/.." && pwd)}"
-DEST="$PARENT_DIR/$NAME"
+DEST_INPUT="${2:-$SCRIPT_DIR/../$NAME}"
 
-if [ -e "$DEST" ]; then
-  echo "Error: $DEST already exists" >&2
+mkdir -p "$DEST_INPUT"
+DEST="$(cd "$DEST_INPUT" && pwd)"
+
+if [ -n "$(ls -A "$DEST" 2>/dev/null)" ]; then
+  echo "Error: $DEST already exists and is not empty" >&2
   exit 1
 fi
 
@@ -36,7 +40,6 @@ for tool in xcodegen xcode-build-server; do
 done
 
 echo "Scaffolding $NAME in $DEST ..."
-mkdir -p "$DEST"
 cp -R "$SCRIPT_DIR/template/." "$DEST/"
 
 mv "$DEST/Sources/__NAME__App.swift" "$DEST/Sources/${NAME}App.swift"
